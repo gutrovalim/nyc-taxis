@@ -1,3 +1,18 @@
+.DS_Store
+*.plan
+*.hash
+# Dados locais
+data/
+# Terraform
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+crash.log
+.terraformrc
+terraform.rc
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
