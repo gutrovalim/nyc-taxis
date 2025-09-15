@@ -1,7 +1,7 @@
-resource "aws_glue_catalog_table" "tb_yellow_taxi" {
+resource "aws_glue_catalog_table" "tb_yellow_taxi_silver" {
 	name          = "tb_yellow_taxi"
-	database_name = "db_bronze"
-	depends_on    = [aws_glue_catalog_database.db_bronze]
+	database_name = "db_silver"
+	depends_on    = [aws_glue_catalog_database.db_silver]
 
 	table_type = "EXTERNAL_TABLE"
 
@@ -11,12 +11,12 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 	}
 
 	storage_descriptor {
-	location      = "s3://nyc-taxis-bronze/yellow_tripdata/"
+		location      = "s3://nyc-taxis-silver/yellow-taxi/"
 		input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
 		output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
 
 		ser_de_info {
-			name                  = "tb_yellow_taxi"
+			name                  = "tb_yellow_taxi_silver"
 			serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
 			parameters = {
 				"serialization.format" = 1
@@ -25,7 +25,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 
 		columns {
 			name    = "VendorID"
-			type    = "bigint"
+			type    = "int"
 			comment = "Código do provedor TPEP. 1=Creative Mobile Technologies, LLC; 2=Curb Mobility, LLC; 6=Myle Technologies Inc; 7=Helix"
 		}
 		columns {
@@ -40,7 +40,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "passenger_count"
-			type    = "double"
+			type    = "int"
 			comment = "Número de passageiros"
 		}
 		columns {
@@ -50,7 +50,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "RatecodeID"
-			type    = "double"
+			type    = "int"
 			comment = "Código da tarifa final. 1=Standard; 2=JFK; 3=Newark; 4=Nassau/Westchester; 5=Negociada; 6=Grupo; 99=Null"
 		}
 		columns {
@@ -60,17 +60,17 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "PULocationID"
-			type    = "bigint"
+			type    = "int"
 			comment = "Zona TLC de início da corrida"
 		}
 		columns {
 			name    = "DOLocationID"
-			type    = "bigint"
+			type    = "int"
 			comment = "Zona TLC de fim da corrida"
 		}
 		columns {
 			name    = "payment_type"
-			type    = "bigint"
+			type    = "int"
 			comment = "Tipo de pagamento. 0=Flex; 1=Cartão; 2=Dinheiro; 3=Sem cobrança; 4=Disputa; 5=Desconhecido; 6=Cancelado"
 		}
 		columns {
@@ -123,5 +123,140 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 			type    = "double"
 			comment = "Taxa de congestionamento MTA (desde 2025)"
 		}
+    }
+    partition_keys {
+        name = "year_month"
+        type = "int"
+    }
+}
+resource "aws_glue_catalog_table" "tb_yellow_taxi" {
+	name          = "tb_yellow_taxi"
+	database_name = "db_bronze"
+	depends_on    = [aws_glue_catalog_database.db_bronze]
+
+	table_type = "EXTERNAL_TABLE"
+
+	parameters = {
+		EXTERNAL              = "TRUE"
+		"parquet.compression" = "SNAPPY"
 	}
+
+	storage_descriptor {
+	location      = "s3://nyc-taxis-bronze/yellow-taxi/"
+		input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
+		output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
+
+		ser_de_info {
+			name                  = "tb_yellow_taxi"
+			serialization_library = "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe"
+			parameters = {
+				"serialization.format" = 1
+			}
+		}
+
+		columns {
+			name    = "VendorID"
+			type    = "string"
+			comment = "Código do provedor TPEP. 1=Creative Mobile Technologies, LLC; 2=Curb Mobility, LLC; 6=Myle Technologies Inc; 7=Helix"
+		}
+		columns {
+			name    = "tpep_pickup_datetime"
+			type    = "string"
+			comment = "Data/hora início da corrida (TPEP)"
+		}
+		columns {
+			name    = "tpep_dropoff_datetime"
+			type    = "string"
+			comment = "Data/hora fim da corrida (TPEP)"
+		}
+		columns {
+			name    = "passenger_count"
+			type    = "string"
+			comment = "Número de passageiros"
+		}
+		columns {
+			name    = "trip_distance"
+			type    = "string"
+			comment = "Distância da corrida em milhas"
+		}
+		columns {
+			name    = "RatecodeID"
+			type    = "string"
+			comment = "Código da tarifa final. 1=Standard; 2=JFK; 3=Newark; 4=Nassau/Westchester; 5=Negociada; 6=Grupo; 99=Null"
+		}
+		columns {
+			name    = "store_and_fwd_flag"
+			type    = "string"
+			comment = "Flag de armazenamento e envio. Y=store and forward; N=not store and forward"
+		}
+		columns {
+			name    = "PULocationID"
+			type    = "string"
+			comment = "Zona TLC de início da corrida"
+		}
+		columns {
+			name    = "DOLocationID"
+			type    = "string"
+			comment = "Zona TLC de fim da corrida"
+		}
+		columns {
+			name    = "payment_type"
+			type    = "string"
+			comment = "Tipo de pagamento. 0=Flex; 1=Cartão; 2=Dinheiro; 3=Sem cobrança; 4=Disputa; 5=Desconhecido; 6=Cancelado"
+		}
+		columns {
+			name    = "fare_amount"
+			type    = "string"
+			comment = "Valor calculado pelo taxímetro"
+		}
+		columns {
+			name    = "extra"
+			type    = "string"
+			comment = "Extras e sobretaxas"
+		}
+		columns {
+			name    = "mta_tax"
+			type    = "string"
+			comment = "Taxa MTA"
+		}
+		columns {
+			name    = "tip_amount"
+			type    = "string"
+			comment = "Valor da gorjeta (apenas cartão)"
+		}
+		columns {
+			name    = "tolls_amount"
+			type    = "string"
+			comment = "Total de pedágios"
+		}
+		columns {
+			name    = "improvement_surcharge"
+			type    = "string"
+			comment = "Sobretaxa de melhoria"
+		}
+		columns {
+			name    = "total_amount"
+			type    = "string"
+			comment = "Valor total cobrado (sem gorjeta em dinheiro)"
+		}
+		columns {
+			name    = "congestion_surcharge"
+			type    = "string"
+			comment = "Valor da sobretaxa de congestionamento NYS"
+		}
+		columns {
+			name    = "airport_fee"
+			type    = "string"
+			comment = "Taxa de aeroporto (apenas pickups em LGA/JFK)"
+		}
+		columns {
+			name    = "cbd_congestion_fee"
+			type    = "string"
+			comment = "Taxa de congestionamento MTA (desde 2025)"
+		}
+    }
+    partition_keys {
+        name = "year_month"
+        type = "int"
+    }
 }

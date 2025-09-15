@@ -14,6 +14,10 @@ resource "aws_s3_bucket" "nyc_taxis_gold" {
   bucket = "nyc-taxis-gold"
 }
 
+resource "aws_s3_bucket" "nyc_taxis_raw" {
+  bucket = "nyc-taxis-raw"
+}
+
 # Upload all scripts from the local src/ directory to the nyc-taxi-scripts bucket
 resource "aws_s3_bucket_object" "scripts" {
   for_each   = fileset("${path.root}/src", "**/*")
