@@ -25,7 +25,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 
 		columns {
 			name    = "VendorID"
-			type    = "int"
+			type    = "bigint"
 			comment = "Código do provedor TPEP. 1=Creative Mobile Technologies, LLC; 2=Curb Mobility, LLC; 6=Myle Technologies Inc; 7=Helix"
 		}
 		columns {
@@ -40,7 +40,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "passenger_count"
-			type    = "int"
+			type    = "double"
 			comment = "Número de passageiros"
 		}
 		columns {
@@ -50,7 +50,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "RatecodeID"
-			type    = "int"
+			type    = "double"
 			comment = "Código da tarifa final. 1=Standard; 2=JFK; 3=Newark; 4=Nassau/Westchester; 5=Negociada; 6=Grupo; 99=Null"
 		}
 		columns {
@@ -60,17 +60,17 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 		}
 		columns {
 			name    = "PULocationID"
-			type    = "int"
+			type    = "bigint"
 			comment = "Zona TLC de início da corrida"
 		}
 		columns {
 			name    = "DOLocationID"
-			type    = "int"
+			type    = "bigint"
 			comment = "Zona TLC de fim da corrida"
 		}
 		columns {
 			name    = "payment_type"
-			type    = "int"
+			type    = "bigint"
 			comment = "Tipo de pagamento. 0=Flex; 1=Cartão; 2=Dinheiro; 3=Sem cobrança; 4=Disputa; 5=Desconhecido; 6=Cancelado"
 		}
 		columns {
