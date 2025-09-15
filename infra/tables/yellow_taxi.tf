@@ -11,7 +11,7 @@ resource "aws_glue_catalog_table" "tb_yellow_taxi" {
 	}
 
 	storage_descriptor {
-	location      = "s3://nyc-taxis-bronze/tb_yellow_taxi"
+	location      = "s3://nyc-taxis-bronze/yellow_tripdata/"
 		input_format  = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat"
 		output_format = "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat"
 
