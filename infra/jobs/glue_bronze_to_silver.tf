@@ -8,7 +8,7 @@ resource "aws_glue_job" "job_green_bronze_to_silver" {
 	}
 		default_arguments = {
 			"--additional-python-modules" = replace(trimspace(file("${path.module}/../../requirements.txt")), "\n", ",")
-			"--DATA" = ""
+			"--DATA" = "2023-01"
 		}
 	name     = "job_green_bronze_to_silver"
 	role_arn = "arn:aws:iam::182205399724:role/AWSGlueServiceRoleDefault" # ajuste para seu ARN
@@ -30,7 +30,7 @@ resource "aws_glue_job" "job_yellow_bronze_to_silver" {
 	}
 		default_arguments = {
 			"--additional-python-modules" = replace(trimspace(file("${path.module}/../../requirements.txt")), "\n", ",")
-			"--DATA" = ""
+			"--DATA" = "2023-01"
 		}
 	name     = "job_yellow_bronze_to_silver"
 	role_arn = "arn:aws:iam::182205399724:role/AWSGlueServiceRoleDefault"

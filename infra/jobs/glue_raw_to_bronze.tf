@@ -11,7 +11,7 @@ resource "aws_glue_job" "job_green_raw_to_bronze" {
   }
   default_arguments = {
     "--additional-python-modules" = replace(trimspace(file("${path.module}/../../requirements.txt")), "\n", ",")
-    "--DATA" = ""
+    "--DATA" = "2023-01"
   }
   command {
     name            = "glueetl"
@@ -34,7 +34,7 @@ resource "aws_glue_job" "job_yellow_raw_to_bronze" {
   }
   default_arguments = {
     "--additional-python-modules" = replace(trimspace(file("${path.module}/../../requirements.txt")), "\n", ",")
-    "--DATA" = ""
+    "--DATA" = "2023-01"
   }
   command {
     name            = "glueetl"

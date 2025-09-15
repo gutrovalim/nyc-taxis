@@ -9,7 +9,7 @@ resource "aws_glue_job" "job_silver_to_gold" {
   }
   default_arguments = {
 	"--additional-python-modules" = replace(trimspace(file("${path.module}/../../requirements.txt")), "\n", ","),
-    "--DATA" = ""
+    "--DATA" = "2023-01"
   }
   depends_on = [local_file.requirements_hash]
   name     = "job_silver_to_gold"
